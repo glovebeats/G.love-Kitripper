@@ -49,8 +49,21 @@ jobs:
           name: GLoveKitRipper-macOS-universal
           path: dist/*.zip
 
-      - name: Release (solo sui tag v*)
-        if: startsWith(github.ref, 'refs/tags/v')
+      - name: Versione dal CMakeLists
+        id: ver
+        run: echo "v=v$(sed -n 's/^project(GLoveKitRipper VERSION \([0-9.]*\)).*/\1/p' CMakeLists.txt)" >> "$GITHUB_OUTPUT"
+
+      # Release: sui tag v*, oppure su main quando il messaggio del commit contiene [release]
+      # (il tag vX.Y.Z viene creato da GitHub con la versione scritta nel CMakeLists)
+      - name: Release
+        if: startsWith(github.ref, 'refs/tags/v') || (github.ref == 'refs/heads/main' && contains(github.event.head_commit.message, '[release]'))
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: ${{ startsWith(github.ref, 'refs/tags/v') && github.ref_name || steps.ver.outputs.v }}
+          target_commitish: ${{ github.sha }}
+          name: G.LOVE Kit Ripper ${{ startsWith(github.ref, 'refs/tags/v') && github.ref_name || steps.ver.outputs.v }}
+          body: |
+            Plugin AU per Logic Pro (Apple Silicon + Intel).
+            Scarica lo zip, aprilo e fai doppio click su INSTALLA-TESTER.command.
+            Poi in Logic: traccia Software Instrument > AU Instruments > G.LOVE > G.LOVE Kit Ripper.
           files: dist/*.zip

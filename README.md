@@ -15,7 +15,7 @@ Audio Unit per Logic Pro: trascini un loop, un break o lo stem di batteria e ott
 ## Scaricare il plugin già compilato
 Ogni push su `main` compila il plugin Universal (Apple Silicon + Intel) su GitHub Actions.
 Tab **Actions** → ultimo run verde → artifact **GLoveKitRipper-macOS-universal**.
-Per una versione "ufficiale" crea un tag `vX.Y.Z`: lo zip finisce nelle **Releases**.
+Per una release: alza la versione in `CMakeLists.txt` e metti `[release]` nel messaggio del commit (oppure crea un tag `vX.Y.Z`): lo zip finisce nelle **Releases**.
 
 ## Compilare sul proprio Mac
 Doppio click su `INSTALLA.command` (vedi `LEGGIMI.txt`).
