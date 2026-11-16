@@ -1,0 +1,10 @@
+G.LOVE KIT RIPPER — versione di prova
+
+1. Doppio click su INSTALLA-TESTER.command
+   (se macOS lo blocca: tasto destro > Apri > Apri)
+2. Apri Logic > nuova traccia Software Instrument > AU Instruments > G.LOVE > G.LOVE Kit Ripper
+   (se non compare: Logic > Impostazioni > Plug-in Manager > "Reset & Rescan Selection")
+
+Uso: trascina un loop o lo stem di batteria (Stem Splitter di Logic) sullo schermo.
+Ogni suono diventa un pad (pad 1 = C1). Trascina il pad su una traccia = WAV,
+trascina il tasto MIDI del pad = MIDI con i colpi di quel suono. MIDI TUTTO = pattern completo.

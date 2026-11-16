@@ -1,0 +1,56 @@
+name: Build macOS (AU Universal)
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+  workflow_dispatch:
+
+permissions: { contents: write }
+jobs:
+  build:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cache JUCE
+        uses: actions/cache@v4
+        with:
+          path: build/_deps
+          key: juce-${{ hashFiles('CMakeLists.txt') }}
+
+      - name: Configure (Apple Silicon + Intel)
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64"
+
+      - name: Build
+        run: cmake --build build --config Release -j "$(sysctl -n hw.ncpu)"
+
+      - name: Sign (ad-hoc) and validate
+        run: |
+          COMP="build/GLoveKitRipper_artefacts/Release/AU/G.LOVE Kit Ripper.component"
+          codesign --force --deep -s - "$COMP"
+          lipo -info "$COMP/Contents/MacOS/"*
+          mkdir -p ~/Library/Audio/Plug-Ins/Components
+          cp -R "$COMP" ~/Library/Audio/Plug-Ins/Components/ || true
+          killall -9 AudioComponentRegistrar 2>/dev/null || true
+          auval -v aumu Gkrp Glov | tail -n 5 || true
+
+      - name: Package
+        run: |
+          mkdir -p dist/GLoveKitRipper
+          cp -R "build/GLoveKitRipper_artefacts/Release/AU/G.LOVE Kit Ripper.component" dist/GLoveKitRipper/
+          cp tester/INSTALLA-TESTER.command tester/LEGGIMI-TESTER.txt dist/GLoveKitRipper/
+          chmod +x dist/GLoveKitRipper/INSTALLA-TESTER.command
+          cd dist && ditto -c -k --keepParent GLoveKitRipper "GLoveKitRipper-${GITHUB_SHA::7}.zip"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: GLoveKitRipper-macOS-universal
+          path: dist/*.zip
+
+      - name: Release (solo sui tag v*)
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*.zip

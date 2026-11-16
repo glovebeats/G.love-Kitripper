@@ -1,0 +1,38 @@
+G.LOVE KIT RIPPER — un loop diventa un kit di batteria + MIDI
+
+COSA FA
+Trascini un file audio (loop, break, stem di batteria o brano intero) e il plugin:
+1. trova ogni colpo, preciso al campione
+2. capisce cos'è: KICK, SNARE, CLAP, HAT, OPEN HAT, TOM, PERC, CRASH
+3. raggruppa i colpi uguali (due rullanti diversi = due pad)
+4. per ogni gruppo crea un one-shot pulito: allinea tutti i colpi e tiene solo
+   quello che si ripete (voce, basso, accordi spariscono)
+5. stima il BPM e prepara un file MIDI per ogni suono
+
+USO IN LOGIC
+- Traccia Software Instrument > AU Instruments > G.LOVE > G.LOVE Kit Ripper
+- Consigliato: Stem Splitter di Logic sul sample, tieni solo "Drums",
+  poi trascina il file della batteria sullo schermo del plugin
+  (se Logic non lascia trascinare la region: File > Esporta > Region come file audio).
+  Funziona anche sul mix intero, solo un po' meno pulito.
+- Pad 1 = C1 (36), pad 2 = C#1 ... come Drum Machine Designer. 32 pad (banchi A e B).
+
+DRAG VERSO LOGIC
+- Trascina un pad su una traccia audio → arriva il WAV (con tune/volume/lunghezza applicati)
+- Trascina il tasto MIDI del pad su una traccia instrument → MIDI con solo quel suono
+  (es. tutti i colpi di cassa), sulla nota del pad, con la velocity originale
+- MIDI TUTTO → tutto il pattern in un'unica region
+- I MIDI partono dall'inizio del file: mettili alla stessa battuta della region audio
+- QUANTIZZA 1/16 spento = groove originale; acceso = sulla griglia
+- BPM: stimato in automatico; doppio click per scriverlo a mano, AUTO per tornare alla stima
+
+ALTRO
+- SENSIBILITA': più alta = trova anche i colpi deboli (ghost note). Ricalcola quando molli la manopola.
+- PULIZIA: 0% = il colpo migliore così com'è, 100% = solo ciò che si ripete.
+- Tasto destro su un pad = cambia tipo. Trascina un tuo sample su un pad = sostituisce il suono
+  (il pattern MIDI resta).
+- ESPORTA KIT = tutti i WAV e i MIDI in ~/Music/G.LOVE Kit Ripper/<nome file>/
+- Il progetto ricorda il file sorgente e rifà l'analisi alla riapertura.
+
+COMPILARE SUL PROPRIO MAC
+Doppio click su INSTALLA.command (se macOS lo blocca: tasto destro > Apri).
