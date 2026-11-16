@@ -6,11 +6,15 @@ on:
     tags: ['v*']
   pull_request:
   workflow_dispatch:
+    inputs:
+      runner:
+        description: 'Runner macOS (macos-15-intel, macos-15, macos-14)'
+        default: 'macos-15-intel'
 
 permissions: { contents: write }
 jobs:
   build:
-    runs-on: macos-15
+    runs-on: ${{ github.event.inputs.runner || 'macos-15-intel' }}
     steps:
       - uses: actions/checkout@v4
 
